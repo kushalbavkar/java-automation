@@ -10,8 +10,7 @@ import org.junit.runner.RunWith;
         features = "classpath:",
         glue = {"com.java.automation.glue", "com.java.automation.configuration"},
         plugin = {
-                "html:target/cucumber-html-report",
-                "json:target/cucumber.json",
+                "io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm",
         },
         monochrome = true
 )

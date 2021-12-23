@@ -1,6 +1,6 @@
 # Java BDD framework
 
-* Testing framework for black box testing using io.cucumber, java, selenium
+### Testing framework for black box testing using cucumber, java, selenium.
 
 ## Pre-requisites
 
@@ -40,6 +40,16 @@ The tests environments are managed using spring profiles and can be configured u
 
 ### Run tests
 
-Simply execute grade task
+Simply execute gradle task
 
-    $ gradlew.bat cucumber
+    $ gradlew.bat :test
+
+### Generate allure reports
+
+    $ gradlew.bat :allureReport
+
+_(You will find the report in `build/reports/allure-reports` directory)_
+
+    $ gradlew.bat :allureServe
+
+_(You will find the report automatically generated in temp directory & served on your default browser)_

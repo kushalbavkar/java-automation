@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'org.springframework.boot' version '2.6.1'
+    id 'io.qameta.allure' version '2.8.1'
 }
 
 group 'org.kushal.automation'
@@ -8,47 +9,45 @@ version '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
+    jcenter()
 }
 
 dependencies {
+//    Selenium dependency
     compile group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '3.141.59'
 
+//    Cucumber dependencies
     implementation group: 'io.cucumber', name: 'cucumber-core', version: '7.1.0'
     implementation group: 'io.cucumber', name: 'cucumber-java', version: '7.1.0'
     testImplementation group: 'io.cucumber', name: 'cucumber-junit', version: '7.1.0'
     implementation group: 'io.cucumber', name: 'cucumber-spring', version: '7.1.0'
+
+//    Spring boot dependency
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '2.6.1'
-    testImplementation group: 'org.junit.vintage', name: 'junit-vintage-engine', version: '5.7.0'
-    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.7.0'
-    testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.7.0'
+
+//    Allure dependencies
+    implementation group: 'io.qameta.allure', name: 'allure-junit5', version: '2.13.6'
+    implementation group: 'io.qameta.allure', name: 'allure-cucumber7-jvm', version: '2.17.2'
+    implementation group: 'io.qameta.allure', name: 'allure-gradle', version: '2.5'
+
+//    JUnit dependencies
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.8.1'
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.8.1'
+    testImplementation group: 'org.junit.vintage', name: 'junit-vintage-engine', version: '5.8.1'
 }
 
-configurations {
-    cucumberRuntime {
-        extendsFrom testImplementation
-    }
+allure {
+    version = '2.13.6'
+    autoconfigure = true
 }
 
 bootJar {
     enabled = false
 }
 
-task cucumber() {
-    dependsOn assemble, testClasses
-    doLast {
-        javaexec {
-            main = "io.cucumber.core.cli.Main"
-            classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output
-            args = [
-                    '--plugin',
-                    'pretty',
-                    '--glue', 'com.java.automation.glue',
-                    '--glue', 'com.java.automation.configuration',
-                    'src/test/resources']
-        }
-    }
+jar {
+    enabled = false
 }
-
 
 test {
     useJUnitPlatform()

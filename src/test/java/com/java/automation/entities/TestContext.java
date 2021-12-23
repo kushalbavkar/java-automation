@@ -1,8 +1,10 @@
 package com.java.automation.entities;
 
+import io.cucumber.spring.ScenarioScope;
 import org.springframework.stereotype.Component;
 
 @Component
+@ScenarioScope
 public class TestContext {
     private String author;
     private String project;

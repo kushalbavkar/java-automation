@@ -1,7 +1,6 @@
 package com.java.automation.actions.github;
 
 import com.java.automation.actions.Base;
-import io.cucumber.messages.types.Git;
 import org.openqa.selenium.Keys;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
