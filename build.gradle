@@ -23,7 +23,9 @@ dependencies {
     implementation group: 'io.cucumber', name: 'cucumber-spring', version: '7.1.0'
 
 //    Spring boot dependency
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter', version: '2.6.1'
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '2.6.1'
+    testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-jdbc', version: '2.6.1'
 
 //    Allure dependencies
     implementation group: 'io.qameta.allure', name: 'allure-junit5', version: '2.13.6'
@@ -34,6 +36,10 @@ dependencies {
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.8.1'
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.8.1'
     testImplementation group: 'org.junit.vintage', name: 'junit-vintage-engine', version: '5.8.1'
+
+//    Extra dependencies
+    implementation group: 'com.codoid.products', name: 'fillo', version: '1.21'
+    runtimeOnly group: 'com.h2database', name: 'h2', version: '2.0.206'
 }
 
 allure {

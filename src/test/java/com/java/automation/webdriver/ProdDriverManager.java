@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Component;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -16,30 +17,34 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
+@Component
 @Profile("prod")
 public class ProdDriverManager implements DriverManager {
-    private final static Logger log = LoggerFactory.getLogger(ProdDriverManager.class);
-
-    @Autowired
-    private Properties props;
+    private static final Logger log = LoggerFactory.getLogger(ProdDriverManager.class);
 
     private WebDriver driver = null;
+    private Properties props;
+
+    @Autowired
+    public ProdDriverManager(final Properties props) {
+        this.props = props;
+    }
 
     @Override
     public WebDriver getDriver() {
-        if (driver != null)
-            return driver;
+        if (this.driver != null)
+            return this.driver;
 
         try {
-            URL url = new URL(props.getProperty("driver"));
+            URL url = new URL(this.props.getProperty("driver"));
             log.info("Starting webdriver using remote driver. URL [{}]", url);
 
             ChromeOptions options = getOptions();
             log.info("Using ChromeOptions [{}]", options.toJson());
 
-            driver = new RemoteWebDriver(url, options);
-            driver.manage().timeouts().pageLoadTimeout(Constants.PAGE_LOAD_TIMEOUT, TimeUnit.SECONDS);
-            driver.manage().timeouts().implicitlyWait(Constants.IMPLICIT_WAIT, TimeUnit.SECONDS);
+            this.driver = new RemoteWebDriver(url, options);
+            this.driver.manage().timeouts().pageLoadTimeout(Constants.PAGE_LOAD_TIMEOUT, TimeUnit.SECONDS);
+            this.driver.manage().timeouts().implicitlyWait(Constants.IMPLICIT_WAIT, TimeUnit.SECONDS);
         } catch (MalformedURLException e) {
             log.error("Malformed driver URL", e);
         }
@@ -72,9 +77,9 @@ public class ProdDriverManager implements DriverManager {
     @Override
     public void quitDriver() {
         log.info("Destroying driver instance");
-        if (driver != null) {
-            driver.quit();
-            driver = null;
+        if (this.driver != null) {
+            this.driver.quit();
+            this.driver = null;
         }
     }
 }

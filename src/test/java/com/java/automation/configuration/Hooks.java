@@ -9,17 +9,22 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class Hooks {
-    private final static Logger log = LoggerFactory.getLogger(Hooks.class);
+    private static final Logger log = LoggerFactory.getLogger(Hooks.class);
+
+    private DriverManager manager;
+
     @Autowired
-    DriverManager manager;
+    public Hooks(DriverManager manager) {
+        this.manager = manager;
+    }
 
     @Before
-    public void init(Scenario scenario) {
+    public void init(final Scenario scenario) {
         log.info("Staring test execution!");
     }
 
     @After
-    public void teardown(Scenario scenario) {
+    public void teardown(final Scenario scenario) {
         manager.quitDriver();
         log.info("Test execution complete!");
     }

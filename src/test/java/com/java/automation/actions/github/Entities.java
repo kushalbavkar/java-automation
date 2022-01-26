@@ -5,7 +5,7 @@ public class Entities {
         private String author;
         private String project;
 
-        public ProjectDetails(String author, String project) {
+        public ProjectDetails(final String author, final String project) {
             this.author = author;
             this.project = project;
         }

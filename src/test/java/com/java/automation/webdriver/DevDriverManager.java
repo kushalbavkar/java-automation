@@ -19,17 +19,20 @@ import java.util.concurrent.TimeUnit;
 @Component
 @Profile("dev")
 public class DevDriverManager implements DriverManager {
-    private final static Logger log = LoggerFactory.getLogger(DevDriverManager.class);
-
-    @Autowired
-    private Properties props;
+    private static final Logger log = LoggerFactory.getLogger(DevDriverManager.class);
 
     private WebDriver driver = null;
+    private Properties props;
+
+    @Autowired
+    public DevDriverManager(final Properties props) {
+        this.props = props;
+    }
 
     @Override
     public WebDriver getDriver() {
-        if (driver != null)
-            return driver;
+        if (this.driver != null)
+            return this.driver;
 
         Path driverPath = findLocalDriver();
         System.setProperty("webdriver.chrome.driver", driverPath.toString());
@@ -38,15 +41,15 @@ public class DevDriverManager implements DriverManager {
         ChromeOptions options = getOptions();
         log.info("Using ChromeOptions [{}]", options.toJson());
 
-        driver = new ChromeDriver(options);
-        driver.manage().timeouts().pageLoadTimeout(Constants.PAGE_LOAD_TIMEOUT, TimeUnit.SECONDS);
-        driver.manage().timeouts().implicitlyWait(Constants.IMPLICIT_WAIT, TimeUnit.SECONDS);
+        this.driver = new ChromeDriver(options);
+        this.driver.manage().timeouts().pageLoadTimeout(Constants.PAGE_LOAD_TIMEOUT, TimeUnit.SECONDS);
+        this.driver.manage().timeouts().implicitlyWait(Constants.IMPLICIT_WAIT, TimeUnit.SECONDS);
 
-        return driver;
+        return this.driver;
     }
 
     private Path findLocalDriver() {
-        String driver = props.getProperty("driver");
+        String driver = this.props.getProperty("driver");
         Path path = Paths.get(driver);
         return (Files.exists(path)) ?
                 path :
@@ -76,9 +79,9 @@ public class DevDriverManager implements DriverManager {
     @Override
     public void quitDriver() {
         log.info("Destroying driver instance");
-        if (driver != null) {
-            driver.quit();
-            driver = null;
+        if (this.driver != null) {
+            this.driver.quit();
+            this.driver = null;
         }
     }
 }

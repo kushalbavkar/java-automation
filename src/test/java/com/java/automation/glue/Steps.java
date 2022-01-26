@@ -14,26 +14,29 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
 public class Steps {
-    @Autowired
-    GitHub gitHub;
+    private GitHub gitHub;
+    private TestContext context;
 
     @Autowired
-    TestContext context;
+    public Steps(final GitHub gitHub, final TestContext context) {
+        this.gitHub = gitHub;
+        this.context = context;
+    }
 
     @Given("I am on {string} homepage")
-    public void iAmOnHomepage(String site) {
-        Sites.parse(site).ifPresent(s -> context.setSite(s));
+    public void iAmOnHomepage(final String site) {
+        Sites.parse(site).ifPresent(context::setSite);
         gitHub.navigateTo(context.getSite().getUrl());
     }
 
     @When("I search for {string} user")
-    public void iSearchForUser(String user) {
+    public void iSearchForUser(final String user) {
         context.setAuthor(user);
         gitHub.home().search(context.getAuthor()).selectUser();
     }
 
     @And("I select {string} project")
-    public void iSelectProject(String project) {
+    public void iSelectProject(final String project) {
         context.setProject(project);
         gitHub.searchProject(context.getProject()).selectProject();
     }

@@ -11,13 +11,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import javax.annotation.PostConstruct;
 
 public abstract class Base {
-    @Autowired
-    DriverManager manager;
     private WebDriver driver = null;
+
+    private DriverManager manager;
+
+    @Autowired
+    public void setManager(final DriverManager manager) {
+        this.manager = manager;
+    }
 
     @PostConstruct
     private void setDriver() {
-        this.driver = manager.getDriver();
+        this.driver = this.manager.getDriver();
     }
 
     public void navigate(final String url) {
@@ -37,13 +42,13 @@ public abstract class Base {
     }
 
     public WebElement wait(final By locator, final int timeout) {
-        WebDriverWait wait = new WebDriverWait(this.driver, timeout);
+        final WebDriverWait wait = new WebDriverWait(this.driver, timeout);
 
         return wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
     }
 
     private WebElement find(final By locator) {
-        WebDriverWait wait = new WebDriverWait(this.driver, 10);
+        final WebDriverWait wait = new WebDriverWait(this.driver, 10);
 
         return wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
     }
